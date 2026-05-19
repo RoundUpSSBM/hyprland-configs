@@ -1,0 +1,14 @@
+map j navigate next
+map k navigate previous
+map h scroll up
+map l scroll down
+
+map H scroll left 
+map J scroll down
+map K scroll up
+map L scroll right
+
+map = zoom in
+map + zoom original
+
+set selection-clipboard clipboard

@@ -1,0 +1,6 @@
+@define-color clr1 rgba(37, 38, 27, 0.5);   /* unchanged */
+@define-color clr2 rgba(130, 120, 80, 1.0); /* lighter olive-brown */
+@define-color clr3 rgba(252, 245, 210, 1.0); /* pale cream */
+@define-color clr4 rgba(240, 235, 210, 1.0); /* lighter soft beige */
+@define-color clr5 rgba(200, 180, 120, 1.0); /* lightened gold-brown */
+

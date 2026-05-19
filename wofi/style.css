@@ -1,0 +1,74 @@
+@import "wallpaperpalette.css";
+
+/* Make all background elements transparent to avoid GTK overrides */
+* {
+    background-color: transparent;
+    box-shadow: none;
+    border: none;
+}
+
+/* Main Wofi window styling */
+window {
+    font-size: 15px;
+    font-family: "Roboto Medium";
+    background-color: rgba(37, 38, 27, 0.5); /*clr1*/
+    border-radius: 9px;
+    overflow: hidden;
+    box-shadow: none;
+    color: rgba(130, 120, 80, 1.0); /*clr2*/
+}
+
+/* Entry (each selectable item) */
+#entry {
+    margin: 5px 5px;
+    padding-left: 30px;
+    color: rgba(252, 245, 210, 1.0); /*clr3*/
+}
+
+/* Selected entry appearance */
+#entry:selected {
+    background: linear-gradient(
+        45deg,
+        rgba(200, 180, 120, 0.7) 0%, /*clr5*/
+        rgba(130, 120, 80, 0.7) 60% /*clr2*/
+    );
+    color: #25261b;
+    border-radius: 10px;
+}
+
+/* Text color override on selected */
+#text:selected {
+    color: rgba(252, 245, 210, 1.0); /*clr3*/
+}
+
+/* Input box at the top */
+#input {
+    background: linear-gradient(
+        45deg,
+        rgba(200, 190, 120, 0.7) 40%, /*clr5*/
+        rgba(130, 120, 80, 0.7) 60% /*clr2*/
+    );
+    border-radius: 8px;
+    font-size: 20px;
+    font-weight: 500;
+    color: rgba(37, 38, 27, 0.7); /*clr1*/
+    padding: 5px;
+    box-shadow: none;
+    border: none;
+}
+
+#input * {
+  color: rgba(252, 245, 210, 1.0); /*clr3*/
+}
+
+/* Input focus color */
+#input:focus {
+    color: rgba(252, 245, 210, 1.0); /*clr3*/
+}
+
+/* Image padding (optional icons next to entries) */
+#img {
+    padding-right: 10px;
+}
+
+
