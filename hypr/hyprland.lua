@@ -1,95 +1,118 @@
+-------------------
+--- ENABLE LOGS ---
+-------------------
+
 hl.config({
   debug = {disable_logs = false,},
 })
+
+
+local function getHostname()
+    local f = io.popen ("/bin/hostname")
+    local hostname = f:read("*a") or ""
+    f:close()
+    hostname =string.gsub(hostname, "\n$", "")
+    return hostname
+end
+
+host = getHostname() 
 
 ----------------
 --- MONITORS ---
 ----------------
 
--- if monitor_mode == nil then monitor_mode = 0 end
-monitor_mode = 0
+if host == "archlinux" then -- laptop
 
-local function applymonitors()
-  monitor_mode = monitor_mode % 2
-  if monitor_mode == 0 then -- side by side with any monitor
-    hl.monitor({
-      output    = "eDP-1",
-      mode      = "2880x1800@120",
-      position  = "0x0", 
-      scale     = "1.6667",
-    })
+  monitor_mode = 0
 
-    hl.monitor({
-      output    = "HDMI-A-1",
-      mode      = "preferred", 
-      position  = "auto",
-      scale     = "1.25",
-    })
+  local function applymonitors()
+    monitor_mode = monitor_mode % 2
+    if monitor_mode == 0 then -- side by side with any monitor
+      hl.monitor({
+        output    = "eDP-1",
+        mode      = "2880x1800@120",
+        position  = "0x0", 
+        scale     = "1.6667",
+      })
+
+      hl.monitor({
+        output    = "HDMI-A-1",
+        mode      = "preferred", 
+        position  = "auto",
+        scale     = "1.25",
+      })
+    end
+
+    if monitor_mode == 1 then -- 2nd monitor above laptop, HG D11
+      hl.monitor({
+        output    = "eDP-1",
+        mode      = "2880x1800@120",
+        position  = "160x1152", 
+        scale     = "1.6667",
+      })
+
+      hl.monitor({
+        output    = "HDMI-A-1",
+        mode      = "2560x1440@99.90", 
+        position  = "0x0",
+        scale     = "1.25",
+      })
+    end
+
+    -- if monitor_mode == 3 then
+    --   hl.monitor({
+    --     output    = "eDP-1",
+    --     mode      = "1880x1800@120",
+    --     position  = "-180x2048",
+    --     scale     = "1.6667",
+    --   })
+    --
+    --   hl.monitor({
+    --     output    = "HDMI-A-1",
+    --     mode      = "2560x1440@99.90", 
+    --     position  = "0x0",
+    --     scale     = "1.25",
+    --     transform = 3,
+    --   })
+    -- end
+    -- hl.exec_cmd("hyprctl reload")
+    hl.exec_cmd("pkill hyprpaper && hyprpaper & disown")
   end
-
-  if monitor_mode == 1 then -- 2nd monitor above laptop, HG D11
-    hl.monitor({
-      output    = "eDP-1",
-      mode      = "2880x1800@120",
-      position  = "160x1152", 
-      scale     = "1.6667",
-    })
-
-    hl.monitor({
-      output    = "HDMI-A-1",
-      mode      = "2560x1440@99.90", 
-      position  = "0x0",
-      scale     = "1.25",
-    })
-  end
-
-  -- if monitor_mode == 3 then
-  --   hl.monitor({
-  --     output    = "eDP-1",
-  --     mode      = "1880x1800@120",
-  --     position  = "-180x2048",
-  --     scale     = "1.6667",
-  --   })
-  --
-  --   hl.monitor({
-  --     output    = "HDMI-A-1",
-  --     mode      = "2560x1440@99.90", 
-  --     position  = "0x0",
-  --     scale     = "1.25",
-  --     transform = 3,
-  --   })
-  -- end
-  -- hl.exec_cmd("hyprctl reload")
-  hl.exec_cmd("pkill hyprpaper && hyprpaper & disown")
-end
-applymonitors()
--- hl.monitor({
---   output    = "eDP-1",
---   mode      = "2880x1800@120",
---   position  = "0x0", 
---   scale     = "1.6667",
--- })
-
--- cycle monitor settings
-hl.bind("f23", function ()
-  monitor_mode = monitor_mode + 1
   applymonitors()
-end)
+  -- hl.monitor({
+  --   output    = "eDP-1",
+  --   mode      = "2880x1800@120",
+  --   position  = "0x0", 
+  --   scale     = "1.6667",
+  -- })
 
--- hl.monitor({
---   output    = "eDP-1",
---   mode      = "2880x1800@120",
---   position  = "160x1152", 
---   scale     = "1.6667",
--- })
---
--- hl.monitor({
---   output    = "HDMI-A-1",
---   mode      = "2560x1440@99.90", 
---   position  = "0x0",
---   scale     = "1.25",
--- })
+  -- cycle monitor settings
+  hl.bind("f23", function ()
+    monitor_mode = monitor_mode + 1
+    applymonitors()
+  end)
 
+  -- hl.monitor({
+  --   output    = "eDP-1",
+  --   mode      = "2880x1800@120",
+  --   position  = "160x1152", 
+  --   scale     = "1.6667",
+  -- })
+  --
+  -- hl.monitor({
+  --   output    = "HDMI-A-1",
+  --   mode      = "2560x1440@99.90", 
+  --   position  = "0x0",
+  --   scale     = "1.25",
+  -- })
+elseif host == "PC-Arch" then
+  hl.monitor({
+    output    = "DP-2",
+    mode      = "2560x1440@60",
+    position  = "0x0", 
+    scale     = "1",
+  })
+end
 -------------------
 --- MY PROGRAMS ---
 -------------------
@@ -278,7 +301,7 @@ hl.config({
 -------------
 --- INPUT ---
 -------------
-
+if host == "archlinx" then 
 hl.config({
     input = {
         kb_layout  = "us",
@@ -304,6 +327,27 @@ hl.gesture({
     direction = "horizontal",
     action    = "workspace"
 })
+elseif host == "PC-Arch" then
+  hl.config({
+      input = {
+          kb_layout  = "us",
+          kb_variant = "",
+          kb_model   = "",
+          kb_options = "compose:rctrl",
+          kb_rules   = "",
+
+          follow_mouse = 1,
+
+          sensitivity = -0.85, -- -1.0 - 1.0, 0 means no modification.
+          accel_profile = flat,
+
+          touchpad = {
+              natural_scroll = true,
+              scroll_factor = 0.5,
+          },
+      },
+  })
+end
 
 -- Example per-device config
 -- See https://wiki.hypr.land/Configuring/Advanced-and-Cool/Devices/ for more
@@ -484,3 +528,4 @@ hl.config({
 })
 
 hl.plugin.csgo_vulkan_fix.vkfix_app({ app = "Minecraft 26.1.2", w = 2880, h = 1800 })
+
