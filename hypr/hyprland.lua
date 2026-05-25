@@ -463,7 +463,7 @@ hl.config({
       pos = { 0, -39 },
       -- pos = { 0, 0 },
       origin = { 1, 0 },
-      imgs = "~/development/Hyprfoci/bongo/",
+      imgs = "~/.config/hypr/bongo/",
       -- imgs = "~/development/hyprfoci-bak/Hyprfoci/bongo/",
       -- img = "/home/thomas/development/hyprfoci-bak/Hyprfoci/bongo/",
       exclude = "",
