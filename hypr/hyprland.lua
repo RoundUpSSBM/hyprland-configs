@@ -53,7 +53,6 @@ local function applymonitors()
       position  = "160x1152", 
       scale     = "1.6667",
     })
-
     hl.monitor({
       output    = "HDMI-A-1",
       mode      = "2560x1440@99.90", 
@@ -69,6 +68,20 @@ local function applymonitors()
   end
 
   hl.exec_cmd("pkill hyprpaper && hyprpaper & disown")
+elseif host == "PC-Arch" then
+  hl.monitor({
+    output    = "DP-2",
+    mode      = "2560x1440@60",
+    position  = "0x0", 
+    scale     = "1",
+  })
+  hl.monitor({
+    output = "VNC-1",
+    mode = "1727x1079@60",
+    -- mode = "1920x1080@60",
+    position = "auto",
+    scale = "1",
+  })
 end
 applymonitors()
 
@@ -133,6 +146,7 @@ hl.permission({ binary = "/home/thomas/development/hypr-bongocat/hypr-bongocat.s
 hl.permission({ binary = "/var/cache/hyprpm/thomas/Hyprfoci/hyprfoci.so", type = "plugin", mode = "allow" })
 hl.permission({ binary = "/var/cache/hyprpm/thomas/hypr-bongocat/hypr-bongocat.so", type = "plugin", mode = "allow" })
 hl.permission({ binary = "/var/cache/hyprpm/thomas/hyprland-plugins/csgo-vulkan-fix.so", type = "plugin", mode = "allow" })
+hl.permission({ binary = "/usr/bin/wayvrc", type = "screencopy", mode = "allow" })
 
 ---------------------
 --- LOOK AND FEEL ---
