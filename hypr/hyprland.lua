@@ -1,6 +1,21 @@
+-------------------
+--- ENABLE LOGS ---
+-------------------
+
 hl.config({
   debug = {disable_logs = false,},
 })
+
+
+local function getHostname()
+    local f = io.popen ("/bin/hostname")
+    local hostname = f:read("*a") or ""
+    f:close()
+    hostname =string.gsub(hostname, "\n$", "")
+    return hostname
+end
+
+host = getHostname() 
 
 ----------------
 --- MONITORS ---
@@ -62,7 +77,6 @@ hl.bind("f23", function ()
   monitor_mode = monitor_mode + 1
   applymonitors()
 end)
-
 -------------------
 --- MY PROGRAMS ---
 -------------------
@@ -241,7 +255,7 @@ hl.config({
 -------------
 --- INPUT ---
 -------------
-
+if host == "archlinux" then 
 hl.config({
     input = {
         kb_layout  = "us",
@@ -267,6 +281,27 @@ hl.gesture({
     direction = "horizontal",
     action    = "workspace"
 })
+elseif host == "PC-Arch" then
+  hl.config({
+      input = {
+          kb_layout  = "us",
+          kb_variant = "",
+          kb_model   = "",
+          kb_options = "compose:rctrl",
+          kb_rules   = "",
+
+          follow_mouse = 1,
+
+          sensitivity = -0.85, -- -1.0 - 1.0, 0 means no modification.
+          accel_profile = flat,
+
+          touchpad = {
+              natural_scroll = true,
+              scroll_factor = 0.5,
+          },
+      },
+  })
+end
 
 -- Example per-device config
 -- See https://wiki.hypr.land/Configuring/Advanced-and-Cool/Devices/ for more
@@ -436,12 +471,12 @@ hl.config({
 --- RESOLUTION FIX ---
 ----------------------
 
--- hl.config({
---   plugin = {
---     csgo_vulkan_fix = {
---       fix_mouse = false,
---     }
---   }
--- })
---
--- hl.plugin.csgo_vulkan_fix.vkfix_app({ app = "Minecraft 26.1.2", w = 2880, h = 1800 })asldkfsldkfj
+hl.config({
+  plugin = {
+    csgo_vulkan_fix = {
+      fix_mouse = true,
+    }
+  }
+})
+
+hl.plugin.csgo_vulkan_fix.vkfix_app({ app = "Minecraft 26.1.2", w = 2880, h = 1800 })
