@@ -24,64 +24,66 @@ host = getHostname()
 monitor_mode = 0
 
 local function applymonitors()
-  monitor_mode = monitor_mode % 2
-  if monitor_mode == 0 then -- side by side with any monitor
-    hl.monitor({
-      output    = "eDP-1",
-      mode      = "2880x1800@120",
-      position  = "0x0", 
-      scale     = "1.6667",
-    })
-    hl.monitor({
-      output    = "HDMI-A-1",
-      mode      = "preferred", 
-      position  = "0x0",
-      scale     = "1.25",
-    })
+  if host == "archlinux" then
+    monitor_mode = monitor_mode % 2
+    if monitor_mode == 0 then -- side by side with any monitor
+      hl.monitor({
+        output    = "eDP-1",
+        mode      = "2880x1800@120",
+        position  = "0x0", 
+        scale     = "1.6667",
+      })
+      hl.monitor({
+        output    = "HDMI-A-1",
+        mode      = "preferred", 
+        position  = "0x0",
+        scale     = "1.25",
+      })
+      hl.monitor({
+        output    = "DP-2",
+        mode      = "preferred", 
+        position  = "auto",
+        scale     = "1",
+      })
+    end
+
+    if monitor_mode == 1 then -- 2nd monitor above laptop, HG D11
+      hl.monitor({
+        output    = "eDP-1",
+        mode      = "2880x1800@120",
+        position  = "160x1152", 
+        scale     = "1.6667",
+      })
+      hl.monitor({
+        output    = "HDMI-A-1",
+        mode      = "2560x1440@99.90", 
+        position  = "0x0",
+        scale     = "1.25",
+      })
+      hl.monitor({
+        output    = "DP-2",
+        mode      = "2560x1440@60", 
+        position  = "0x0",
+        scale     = "1.25",
+      })
+    end
+    hl.exec_cmd("pkill hyprpaper && hyprpaper & disown")
+
+  elseif host == "PC-Arch" then
     hl.monitor({
       output    = "DP-2",
-      mode      = "preferred", 
-      position  = "auto",
+      mode      = "2560x1440@60",
+      position  = "0x0", 
       scale     = "1",
     })
-  end
-
-  if monitor_mode == 1 then -- 2nd monitor above laptop, HG D11
     hl.monitor({
-      output    = "eDP-1",
-      mode      = "2880x1800@120",
-      position  = "160x1152", 
-      scale     = "1.6667",
-    })
-    hl.monitor({
-      output    = "HDMI-A-1",
-      mode      = "2560x1440@99.90", 
-      position  = "0x0",
-      scale     = "1.25",
-    })
-    hl.monitor({
-      output    = "DP-2",
-      mode      = "2560x1440@60", 
-      position  = "0x0",
-      scale     = "1.25",
+      output = "VNC-1",
+      mode = "1727x1079@60",
+      -- mode = "1920x1080@60",
+      position = "auto",
+      scale = "1",
     })
   end
-
-  hl.exec_cmd("pkill hyprpaper && hyprpaper & disown")
-elseif host == "PC-Arch" then
-  hl.monitor({
-    output    = "DP-2",
-    mode      = "2560x1440@60",
-    position  = "0x0", 
-    scale     = "1",
-  })
-  hl.monitor({
-    output = "VNC-1",
-    mode = "1727x1079@60",
-    -- mode = "1920x1080@60",
-    position = "auto",
-    scale = "1",
-  })
 end
 applymonitors()
 
