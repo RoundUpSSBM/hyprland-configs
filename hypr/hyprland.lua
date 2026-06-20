@@ -6,7 +6,6 @@ hl.config({
 --- MONITORS ---
 ----------------
 
--- if monitor_mode == nil then monitor_mode = 0 end
 monitor_mode = 0
 
 local function applymonitors()
@@ -18,12 +17,17 @@ local function applymonitors()
       position  = "0x0", 
       scale     = "1.6667",
     })
-
     hl.monitor({
       output    = "HDMI-A-1",
       mode      = "preferred", 
-      position  = "auto",
+      position  = "0x0",
       scale     = "1.25",
+    })
+    hl.monitor({
+      output    = "DP-2",
+      mode      = "preferred", 
+      position  = "auto",
+      scale     = "1",
     })
   end
 
@@ -41,54 +45,23 @@ local function applymonitors()
       position  = "0x0",
       scale     = "1.25",
     })
+    hl.monitor({
+      output    = "DP-2",
+      mode      = "2560x1440@60", 
+      position  = "0x0",
+      scale     = "1.25",
+    })
   end
 
-  -- if monitor_mode == 3 then
-  --   hl.monitor({
-  --     output    = "eDP-1",
-  --     mode      = "1880x1800@120",
-  --     position  = "-180x2048",
-  --     scale     = "1.6667",
-  --   })
-  --
-  --   hl.monitor({
-  --     output    = "HDMI-A-1",
-  --     mode      = "2560x1440@99.90", 
-  --     position  = "0x0",
-  --     scale     = "1.25",
-  --     transform = 3,
-  --   })
-  -- end
-  -- hl.exec_cmd("hyprctl reload")
   hl.exec_cmd("pkill hyprpaper && hyprpaper & disown")
 end
 applymonitors()
--- hl.monitor({
---   output    = "eDP-1",
---   mode      = "2880x1800@120",
---   position  = "0x0", 
---   scale     = "1.6667",
--- })
 
 -- cycle monitor settings
 hl.bind("f23", function ()
   monitor_mode = monitor_mode + 1
   applymonitors()
 end)
-
--- hl.monitor({
---   output    = "eDP-1",
---   mode      = "2880x1800@120",
---   position  = "160x1152", 
---   scale     = "1.6667",
--- })
---
--- hl.monitor({
---   output    = "HDMI-A-1",
---   mode      = "2560x1440@99.90", 
---   position  = "0x0",
---   scale     = "1.25",
--- })
 
 -------------------
 --- MY PROGRAMS ---
@@ -112,6 +85,10 @@ hl.on("hyprland.start", function()
   hl.exec_cmd("bluetoothctl trust 28:11:A5:DE:7F:A2")
   hl.exec_cmd("bluetoothctl power on")
   hl.exec_cmd("bluetoothctl connect 28:11:A5:DE:7F:A2")
+  -- hl.exec_cmd("hyprctl plugin load ~/development/hypr-bongocat/hypr-bongocat.so")
+  hl.exec_cmd("dbus-update-activation-environment --systemd --all")
+  hl.exec_cmd("gnome-keyring-daemon --start --components=secrets")
+  hl.exec_cmd("sleep 0.1 && nextcloud --background")
 end)
 
 ----------------
@@ -119,8 +96,10 @@ end)
 ----------------
 
 hl.env("XCURSOR_SIZE", "24")
+hl.env("LD_PRELOAD", "")
 hl.env("HYPRCURSOR_SIZE", "24")
 hl.env("HYPRSHOT_DIR", "Pictures/Screenshots")
+hl.env("GSK_RENDERER", "gl") -- prevents nautilus crashes (i hope)
 
 -------------------
 --- PERMISSIONS ---
@@ -136,7 +115,9 @@ hl.config({
 hl.permission({ binary = "/usr/bin/grim", type = "screencopy", mode = "allow" })
 hl.permission({ binary = "/usr/lib/xdg-desktop-portal-hyprland", type = "screencopy", mode = "allow"})
 hl.permission({ binary = "/home/thomas/development/Hyprfoci/hyprfoci.so", type = "plugin", mode = "allow" })
+hl.permission({ binary = "/home/thomas/development/hypr-bongocat/hypr-bongocat.so", type = "plugin", mode = "allow" })
 hl.permission({ binary = "/var/cache/hyprpm/thomas/Hyprfoci/hyprfoci.so", type = "plugin", mode = "allow" })
+hl.permission({ binary = "/var/cache/hyprpm/thomas/hypr-bongocat/hypr-bongocat.so", type = "plugin", mode = "allow" })
 hl.permission({ binary = "/var/cache/hyprpm/thomas/hyprland-plugins/csgo-vulkan-fix.so", type = "plugin", mode = "allow" })
 
 ---------------------
@@ -190,6 +171,10 @@ hl.config({
     animations = {
         enabled = true,
     },
+
+    xwayland = { 
+      force_zero_scaling = true
+    },
 })
 
 -- Default curves and animations, see https://wiki.hypr.land/Configuring/Advanced-and-Cool/Animations/
@@ -198,28 +183,6 @@ hl.curve("easeInOutCubic", { type = "bezier", points = { {0.65, 0.05}, {0.36, 1}
 hl.curve("linear",         { type = "bezier", points = { {0, 0},       {1, 1}       } })
 hl.curve("almostLinear",   { type = "bezier", points = { {0.5, 0.5},   {0.75, 1}    } })
 hl.curve("quick",          { type = "bezier", points = { {0.15, 0},    {0.1, 1}     } })
-
--- Default springs
--- hl.curve("easy",           { type = "spring", mass = 1, stiffness = 71.2633, dampening = 15.8273644 })
---
--- hl.animation({ leaf = "global",        enabled = true,  speed = 10,   bezier = "default" })
--- hl.animation({ leaf = "border",        enabled = true,  speed = 5.39, bezier = "easeOutQuint" })
--- hl.animation({ leaf = "windows",       enabled = true,  speed = 4.79, spring = "easy" })
--- hl.animation({ leaf = "windowsIn",     enabled = true,  speed = 4.1,  spring = "easy",         style = "popin 87%" })
--- hl.animation({ leaf = "windowsOut",    enabled = true,  speed = 1.49, bezier = "linear",       style = "popin 87%" })
--- hl.animation({ leaf = "fadeIn",        enabled = true,  speed = 1.73, bezier = "almostLinear" })
--- hl.animation({ leaf = "fadeOut",       enabled = true,  speed = 1.46, bezier = "almostLinear" })
--- hl.animation({ leaf = "fade",          enabled = true,  speed = 3.03, bezier = "quick" })
--- hl.animation({ leaf = "layers",        enabled = true,  speed = 3.81, bezier = "easeOutQuint" })
--- hl.animation({ leaf = "layersIn",      enabled = true,  speed = 4,    bezier = "easeOutQuint", style = "fade" })
--- hl.animation({ leaf = "layersOut",     enabled = true,  speed = 1.5,  bezier = "linear",       style = "fade" })
--- hl.animation({ leaf = "fadeLayersIn",  enabled = true,  speed = 1.79, bezier = "almostLinear" })
--- hl.animation({ leaf = "fadeLayersOut", enabled = true,  speed = 1.39, bezier = "almostLinear" })
--- hl.animation({ leaf = "workspaces",    enabled = true,  speed = 1.94, bezier = "almostLinear", style = "fade" })
--- hl.animation({ leaf = "workspacesIn",  enabled = true,  speed = 1.21, bezier = "almostLinear", style = "fade" })
--- hl.animation({ leaf = "workspacesOut", enabled = true,  speed = 1.94, bezier = "almostLinear", style = "fade" })
--- hl.animation({ leaf = "zoomFactor",    enabled = true,  speed = 7,    bezier = "quick" })
-
 hl.curve("easy",           { type = "spring", mass = 1, stiffness = 71.2633, dampening = 15.8273644 })
 
 hl.animation({ leaf = "global",        enabled = true,  speed = 10,   bezier = "default" })
@@ -361,6 +324,7 @@ end
 -- Example special workspace (scratchpad)
 hl.bind(mainMod .. " + S",         hl.dsp.workspace.toggle_special("magic"))
 hl.bind(mainMod .. " + SHIFT + S", hl.dsp.window.move({ workspace = "special:magic" }))
+hl.bind(mainMod .. " + ALT + S", hl.dsp.window.move({ workspace = "special:magic" }))
 
 -- Scroll through existing workspaces with mainMod + scroll
 hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
@@ -458,16 +422,13 @@ hl.window_rule({
 
 hl.config({
   plugin = {
-    hyprfoci = {
+    hypr_bongocat = {
       size = { 125, 0 },
       pos = { 0, -39 },
-      -- pos = { 0, 0 },
       origin = { 1, 0 },
-      imgs = "~/development/Hyprfoci/bongo/",
-      -- imgs = "~/development/hyprfoci-bak/Hyprfoci/bongo/",
-      -- img = "/home/thomas/development/hyprfoci-bak/Hyprfoci/bongo/",
+      imgs = "~/.config/hypr/hypr-bongocat/bongo",
       exclude = "",
-    }
+    },
   }
 })
 
@@ -475,12 +436,12 @@ hl.config({
 --- RESOLUTION FIX ---
 ----------------------
 
-hl.config({
-  plugin = {
-    csgo_vulkan_fix = {
-      fix_mouse = true,
-    }
-  }
-})
-
-hl.plugin.csgo_vulkan_fix.vkfix_app({ app = "Minecraft 26.1.2", w = 2880, h = 1800 })
+-- hl.config({
+--   plugin = {
+--     csgo_vulkan_fix = {
+--       fix_mouse = false,
+--     }
+--   }
+-- })
+--
+-- hl.plugin.csgo_vulkan_fix.vkfix_app({ app = "Minecraft 26.1.2", w = 2880, h = 1800 })asldkfsldkfj
