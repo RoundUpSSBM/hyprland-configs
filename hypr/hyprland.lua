@@ -21,7 +21,7 @@ host = getHostname()
 --- MONITORS ---
 ----------------
 
-monitor_mode = 0
+monitor_mode = 1
 
 local function applymonitors()
   if host == "archlinux" then
@@ -36,7 +36,7 @@ local function applymonitors()
       hl.monitor({
         output    = "HDMI-A-1",
         mode      = "preferred", 
-        position  = "0x0",
+        position  = "1728x0",
         scale     = "1.25",
       })
       hl.monitor({
@@ -51,14 +51,16 @@ local function applymonitors()
       hl.monitor({
         output    = "eDP-1",
         mode      = "2880x1800@120",
-        position  = "160x1152", 
+        -- position  = "160x1152", 
+        position = "96x1200",
         scale     = "1.6667",
       })
       hl.monitor({
         output    = "HDMI-A-1",
-        mode      = "2560x1440@99.90", 
+        -- mode      = "2560x1440@99.90", 
+        mode = "1920x1200@59.95",
         position  = "0x0",
-        scale     = "1.25",
+        scale     = "1",
       })
       hl.monitor({
         output    = "DP-2",
@@ -114,7 +116,7 @@ hl.on("hyprland.start", function()
   hl.exec_cmd("bluetoothctl trust 28:11:A5:DE:7F:A2")
   hl.exec_cmd("bluetoothctl power on")
   hl.exec_cmd("bluetoothctl connect 28:11:A5:DE:7F:A2")
-  -- hl.exec_cmd("hyprctl plugin load ~/development/hypr-bongocat/hypr-bongocat.so")
+  hl.exec_cmd("hyprctl plugin load ~/development/hypr-bongocat/hypr-bongocat.so")
   hl.exec_cmd("dbus-update-activation-environment --systemd --all")
   hl.exec_cmd("gnome-keyring-daemon --start --components=secrets")
   hl.exec_cmd("sleep 0.1 && nextcloud --background")
@@ -149,6 +151,7 @@ hl.permission({ binary = "/var/cache/hyprpm/thomas/Hyprfoci/hyprfoci.so", type =
 hl.permission({ binary = "/var/cache/hyprpm/thomas/hypr-bongocat/hypr-bongocat.so", type = "plugin", mode = "allow" })
 hl.permission({ binary = "/var/cache/hyprpm/thomas/hyprland-plugins/csgo-vulkan-fix.so", type = "plugin", mode = "allow" })
 hl.permission({ binary = "/usr/bin/wayvrc", type = "screencopy", mode = "allow" })
+hl.permission({ binary = "/usr/bin/hyprlock", type = "screencopy", mode = "allow" })
 
 ---------------------
 --- LOOK AND FEEL ---
@@ -327,6 +330,15 @@ hl.device({
     accel_profile = adaptive,
 })
 
+hl.device({
+  name            = "logitech-usb-receiver-mouse",
+  sensitivity     = -1,
+})
+hl.device({
+  name            = "logitech-mx-master-4",
+  sensitivity     = -1,
+})
+
 -------------------
 --- KEYBINDINGS ---
 -------------------
@@ -344,6 +356,7 @@ hl.bind(mainMod .. " + T", hl.dsp.layout("togglesplit"))
 hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen({ mode=fullscreen, action=toggle}))
 hl.bind(mainMod .. " + N", hl.dsp.exec_cmd(browser))
 hl.bind(mainMod .. " + Z", hl.dsp.exec_cmd(pdf))
+hl.bind("XF86Favorites", hl.dsp.exec_cmd("hyprlock"))
 
 -- Move focus with mainMod + arrow keys
 hl.bind(mainMod .. " + H", hl.dsp.focus({ direction = "left" }))
@@ -478,6 +491,7 @@ hl.config({
       pos = { 0, -39 },
       origin = { 1, 0 },
       imgs = "~/.config/hypr/hypr-bongocat/bongo",
+      -- imgs = "~/development/hypr-bongocat/xiaohei",
       exclude = "",
     },
   }
@@ -487,12 +501,12 @@ hl.config({
 --- RESOLUTION FIX ---
 ----------------------
 
-hl.config({
-  plugin = {
-    csgo_vulkan_fix = {
-      fix_mouse = true,
-    }
-  }
-})
+-- hl.config({
+--   plugin = {
+--     csgo_vulkan_fix = {
+--       fix_mouse = true,
+--     }
+--   }
+-- })
 
-hl.plugin.csgo_vulkan_fix.vkfix_app({ app = "Minecraft 26.1.2", w = 2880, h = 1800 })
+-- hl.plugin.csgo_vulkan_fix.vkfix_app({ app = "Minecraft 26.1.2", w = 2880, h = 1800 })
